@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class VerificadorDirectorio {
     private ArrayList<Archivo> archivos;
-    private MD5 md5 = new MD5();
+    private MD5 md5;
     
     public VerificadorDirectorio() {
+        archivos = new ArrayList();
+        md5 = new MD5();
     }
 
     public VerificadorDirectorio(ArrayList<Archivo> archivos) {
@@ -31,7 +33,35 @@ public class VerificadorDirectorio {
             }
         }
     }
-
-     
+    
+    public boolean esEliminado(String md5Key, ArrayList<Archivo> archivosGuardados){
+        boolean estaEliminado = false;
+        
+        return estaEliminado;
+    }
+    
+    public boolean esCreado(String md5Key, ArrayList<Archivo> archivosGuardados){
+        boolean estaCreado = false;
+        
+        return estaCreado;
+    }
+    
+    public boolean esModificado(String md5Key, ArrayList<Archivo> archivosGuardados){
+        boolean estaModificado = false;
+        
+        return estaModificado;
+    }
+    
+    public void verifiqueCambiosDelDirectorio(String ruta){
+        File[] arhivos = listeArchivosDelDirectorio(ruta);
+        for (File file : arhivos) {
+            if (file.isFile()) {
+                String md5Key =  md5.getMD5(file.getAbsolutePath());
+                boolean eliminado = esEliminado(md5Key, this.archivos);
+                boolean creado = esCreado(md5Key, this.archivos);
+                boolean modificado = esModificado(md5Key, this.archivos);
+            }
+        }
+    }
     
 }
