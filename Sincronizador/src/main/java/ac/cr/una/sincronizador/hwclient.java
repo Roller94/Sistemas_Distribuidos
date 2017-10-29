@@ -1,11 +1,17 @@
 package ac.cr.una.sincronizador;
 
+import ac.cr.una.ManejadorArchivos.ManejadorArchivo;
+import java.io.IOException;
 import org.zeromq.ZMQ;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class hwclient {
 
-    public static void main(String[] args) {
-        ZMQ.Context context = ZMQ.context(1);        
+    public static void main(String[] args) throws IOException {
+        ZMQ.Context context = ZMQ.context(1); 
+                Path dir = Paths.get("C:/SistemasDistribuidos");
+        new ManejadorArchivo(dir).processEvents();
 
         //  Socket to talk to server
         System.out.println("Connecting to hello world server…");

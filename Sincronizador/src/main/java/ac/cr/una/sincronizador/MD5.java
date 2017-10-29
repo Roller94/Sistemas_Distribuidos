@@ -25,7 +25,7 @@ public class MD5 {
       //leer fichero byte a byte
       
          try{
-            InputStream archivo = new FileInputStream( "F:\\SD\\Tarea 2 y 3 Sistemas Distribuidos.docx" );
+            InputStream archivo = new FileInputStream( "C:\\SistemasDistribuidos" );
             byte[] buffer = new byte[1];
             int fin_archivo = -1;
             int caracter;
