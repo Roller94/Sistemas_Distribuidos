@@ -5,45 +5,26 @@
  */
 package ac.cr.una.modelo;
 
+import java.io.File;
+
 public class Archivo {
-    private String nombre;
-    private Long fechaModificacion;
-    private Long tamano;
+    private File file;
     private String md5;
 
     public Archivo() {
     }
 
-    public Archivo(String nombre, Long fechaModificacion, Long tamano, String md5) {
-        
-        this.nombre = nombre;
-        this.fechaModificacion = fechaModificacion;
-        this.tamano = tamano;
+    public Archivo(File file, String md5) {
+        this.file = file;
         this.md5 = md5;
     }
 
-    public String getNombre() {
-        return nombre;
+    public File getFile() {
+        return file;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Long getFechaModificacion() {
-        return fechaModificacion;
-    }
-
-    public void setFechaModificacion(Long fechaModificacion) {
-        this.fechaModificacion = fechaModificacion;
-    }
-
-    public Long getTamano() {
-        return tamano;
-    }
-
-    public void setTamano(Long tamano) {
-        this.tamano = tamano;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public String getMd5() {
@@ -53,7 +34,5 @@ public class Archivo {
     public void setMd5(String md5) {
         this.md5 = md5;
     }
-    
-    
-                        
+             
 }

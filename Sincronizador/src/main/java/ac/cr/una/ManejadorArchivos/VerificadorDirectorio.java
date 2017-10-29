@@ -27,7 +27,7 @@ public class VerificadorDirectorio {
 
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                archivos.add(new Archivo(file.getName(), file.lastModified(),file.length(), md5.getMD5(file.getAbsolutePath())));
+                archivos.add(new Archivo(file, md5.getMD5(file.getAbsolutePath())));
             }
         }
     }
