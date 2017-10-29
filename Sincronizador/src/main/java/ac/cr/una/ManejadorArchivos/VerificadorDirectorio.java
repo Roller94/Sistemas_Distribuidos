@@ -34,31 +34,41 @@ public class VerificadorDirectorio {
         }
     }
     
-    public boolean esEliminado(String md5Key, ArrayList<Archivo> archivosGuardados){
-        boolean estaEliminado = false;
+    public boolean esEliminado(File file, ArrayList<Archivo> archivosGuardados){
+        boolean estaEliminado = true;
         int tamano = archivosGuardados.size();
         for(int indice = 0; indice < tamano; indice++){
-            
+            if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
+                estaEliminado = false;
+                indice = tamano;
+            }
         }
         
         return estaEliminado;
     }
     
-    public boolean esCreado(String md5Key, ArrayList<Archivo> archivosGuardados){
-        boolean estaCreado = false;
+    public boolean esNuevo(File file, ArrayList<Archivo> archivosGuardados){
+        boolean estaNuevo = false;
         int tamano = archivosGuardados.size();
         for(int indice = 0; indice < tamano; indice++){
-
+            if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
+                estaNuevo = true;
+                indice = tamano;
+            }
         }
         
-        return estaCreado;
+        return estaNuevo;
     }
     
-    public boolean esModificado(String md5Key, ArrayList<Archivo> archivosGuardados){
+    public boolean esModificado(String md5Key, File file, ArrayList<Archivo> archivosGuardados){
         boolean estaModificado = false;
         int tamano = archivosGuardados.size();
         for(int indice = 0; indice < tamano; indice++){
-
+            if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
+                if(!archivosGuardados.get(indice).getMd5().equals(md5)){
+                    estaModificado = true;
+                }
+            }
         }
         
         return estaModificado;
@@ -69,9 +79,9 @@ public class VerificadorDirectorio {
         for (File file : arhivos) {
             if (file.isFile()) {
                 String md5Key =  md5.getMD5(file.getAbsolutePath());
-                boolean eliminado = esEliminado(md5Key, this.archivos);
-                boolean creado = esCreado(md5Key, this.archivos);
-                boolean modificado = esModificado(md5Key, this.archivos);
+                boolean eliminado = esEliminado(file, this.archivos);
+                boolean creado = esNuevo(file, this.archivos);
+                boolean modificado = esModificado(md5Key, file, this.archivos);
             }
         }
     }
