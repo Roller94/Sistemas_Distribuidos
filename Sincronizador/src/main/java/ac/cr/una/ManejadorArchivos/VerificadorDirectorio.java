@@ -36,18 +36,30 @@ public class VerificadorDirectorio {
     
     public boolean esEliminado(String md5Key, ArrayList<Archivo> archivosGuardados){
         boolean estaEliminado = false;
+        int tamano = archivosGuardados.size();
+        for(int indice = 0; indice < tamano; indice++){
+            
+        }
         
         return estaEliminado;
     }
     
     public boolean esCreado(String md5Key, ArrayList<Archivo> archivosGuardados){
         boolean estaCreado = false;
+        int tamano = archivosGuardados.size();
+        for(int indice = 0; indice < tamano; indice++){
+
+        }
         
         return estaCreado;
     }
     
     public boolean esModificado(String md5Key, ArrayList<Archivo> archivosGuardados){
         boolean estaModificado = false;
+        int tamano = archivosGuardados.size();
+        for(int indice = 0; indice < tamano; indice++){
+
+        }
         
         return estaModificado;
     }
