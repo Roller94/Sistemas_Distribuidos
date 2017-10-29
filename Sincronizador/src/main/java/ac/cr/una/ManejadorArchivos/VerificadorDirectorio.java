@@ -2,12 +2,14 @@
 package ac.cr.una.ManejadorArchivos;
 
 import ac.cr.una.modelo.Archivo;
-import java.util.ArrayList;
+import ac.cr.una.sincronizador.MD5;
 import java.io.File;
+import java.util.ArrayList;
 
 public class VerificadorDirectorio {
     private ArrayList<Archivo> archivos;
-
+    private MD5 md5 = new MD5();
+    
     public VerificadorDirectorio() {
     }
 
@@ -25,8 +27,7 @@ public class VerificadorDirectorio {
 
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                //Llamar al metodo que obtiene el md5 y guardarlo ;
-                archivos.add(new Archivo(file.getName(),file.lastModified(),file.length(),"md5 key"));
+                archivos.add(new Archivo(file.getName(), file.lastModified(),file.length(), md5.getMD5(file.getAbsolutePath())));
             }
         }
     }
