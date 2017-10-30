@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ac.cr.una.sincronizador;
 
 import java.io.File;
@@ -14,10 +10,6 @@ import org.zeromq.ZFrame;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMsg;
 
-/**
- *
- * @author jose
- */
 public class enviarZMQ {
     public static void main(String[] args) {
 
@@ -30,31 +22,20 @@ public class enviarZMQ {
             ZMQ.Socket requester = context.socket(ZMQ.REQ);
             requester.connect("tcp://localhost:5555");
             
-            /*for (int requestNbr = 0; requestNbr != 10; requestNbr++) {
-            String request = "Hello";
-            System.out.println("Sending Hello " + requestNbr);
-            requester.send(request.getBytes(), 0);
-
-            byte[] reply = requester.recv(0);
-            System.out.println("Received " + new String(reply) + " " + requestNbr);
-            }*/
-            
-            String path = "/home/jose/Escritorio/CarpetaSinc/Doc1.txt";
+            String path = "C:\\SistemasDistribuidos\\Pruebas.txt";
             File dirOrigen  = new File(path);
             byte[] array = Files.readAllBytes(dirOrigen.toPath());
             
             ZMsg outMsg = new ZMsg();
             outMsg.add(new ZFrame("application/xml"));
-            outMsg.add(new ZFrame("abc.pdf"));
-            outMsg.add(new ZFrame(array)); // here is the data from file
+            outMsg.add(new ZFrame(dirOrigen.getName()));
+            outMsg.add(new ZFrame(array));
             outMsg.send(requester);
-            
-            
-            
+                        
             requester.close();
             context.term();
         } catch (IOException ex) {
-            Logger.getLogger(hwclient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(enviarZMQ.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
