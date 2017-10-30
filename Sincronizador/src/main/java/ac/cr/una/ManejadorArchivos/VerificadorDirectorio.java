@@ -2,6 +2,7 @@
 package ac.cr.una.ManejadorArchivos;
 
 import ac.cr.una.modelo.Archivo;
+import ac.cr.una.modelo.ArchivoControl;
 import ac.cr.una.sincronizador.MD5;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +20,10 @@ public class VerificadorDirectorio {
         this.archivos = archivos;
     }
     
+    public void agregueNuevoArchivo(Archivo archivo){
+        archivos.add(archivo);
+    }
+    
     public File[] listeArchivosDelDirectorio(String ruta){
         File folder = new File(ruta);
         return folder.listFiles();
@@ -34,25 +39,31 @@ public class VerificadorDirectorio {
         }
     }
     
-    public boolean esEliminado(File file, ArrayList<Archivo> archivosGuardados){
-        boolean estaEliminado = true;
+    public ArrayList<Archivo> obtengaArhivosEliminados(File[] arhivosActuales, ArrayList<Archivo> archivosGuardados){
+        ArrayList<Archivo> eliminados= new ArrayList<>();
+        boolean estaEliminado = false;
         int tamano = archivosGuardados.size();
         for(int indice = 0; indice < tamano; indice++){
-            if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
-                estaEliminado = false;
-                indice = tamano;
+            estaEliminado = false;
+            for (File file : arhivosActuales) {
+                if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
+                    estaEliminado = true;
+                }
+            }
+            if(!estaEliminado){
+                eliminados.add(new Archivo(archivosGuardados.ge, md5));
             }
         }
         
-        return estaEliminado;
+        return eliminados;
     }
     
     public boolean esNuevo(File file, ArrayList<Archivo> archivosGuardados){
-        boolean estaNuevo = false;
+        boolean estaNuevo = true;
         int tamano = archivosGuardados.size();
         for(int indice = 0; indice < tamano; indice++){
             if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
-                estaNuevo = true;
+                estaNuevo = false;
                 indice = tamano;
             }
         }
@@ -65,7 +76,7 @@ public class VerificadorDirectorio {
         int tamano = archivosGuardados.size();
         for(int indice = 0; indice < tamano; indice++){
             if(archivosGuardados.get(indice).getFile().getName().equals(file.getName())){
-                if(!archivosGuardados.get(indice).getMd5().equals(md5)){
+                if(!archivosGuardados.get(indice).getMd5().equals(md5Key)){
                     estaModificado = true;
                 }
             }
@@ -74,16 +85,26 @@ public class VerificadorDirectorio {
         return estaModificado;
     }
     
-    public void verifiqueCambiosDelDirectorio(String ruta){
+    public ArrayList<ArchivoControl> obtengaCambiosDelDirectorio(String ruta){
         File[] arhivos = listeArchivosDelDirectorio(ruta);
+        ArrayList<ArchivoControl> control = new ArrayList<>();
         for (File file : arhivos) {
             if (file.isFile()) {
                 String md5Key =  md5.getMD5(file.getAbsolutePath());
-                boolean eliminado = esEliminado(file, this.archivos);
-                boolean creado = esNuevo(file, this.archivos);
-                boolean modificado = esModificado(md5Key, file, this.archivos);
+                boolean nuevo = esNuevo(file, this.archivos);
+                if(nuevo){
+                    agregueNuevoArchivo(new Archivo(file, md5Key));
+                    control.add(new ArchivoControl(false, true, false, file, md5Key));
+                } else{
+                    boolean modificado = esModificado(md5Key, file, this.archivos);
+                    control.add(new ArchivoControl(false, nuevo, modificado, file, md5Key));
+                }               
             }
         }
+        
+        
+        
+        return control;
     }
     
 }
