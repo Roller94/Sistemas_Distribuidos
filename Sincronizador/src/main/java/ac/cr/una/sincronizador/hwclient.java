@@ -17,6 +17,7 @@ public class hwclient {
         //  Socket to talk to server
         
         String ruta = "C://SistemasDistribuidos";
+        String ip = "192.168.1.54";
         
         VerificadorDirectorio verifique = new VerificadorDirectorio();
         verifique.almaceneArchivosDelDirectorioEnMemoria(ruta);
@@ -32,14 +33,11 @@ public class hwclient {
 
         for (int requestNbr = 0; requestNbr != 10; requestNbr++) {
             
-            Thread.sleep(10000);
+            Thread.sleep(10000);            
             ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(ruta);            
             
             for(int i = 0; i < archivos.size(); i++){
-                System.out.print("Nombre: " + archivos.get(i).getFile().getName());
-                System.out.print("  Eliminado: " + archivos.get(i).isElimando());
-                System.out.print("  Modificado: " + archivos.get(i).isModificado());
-                System.out.print("  Nuevo: " + archivos.get(i).isNuevo());
+                System.out.println("Nombre: " + archivos.get(i).getFile().getName()+"  Eliminado: " + archivos.get(i).isElimando()+"  Modificado: " + archivos.get(i).isModificado()+"  Nuevo: " + archivos.get(i).isNuevo());
                 System.err.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");                
             }
             archivos.clear();

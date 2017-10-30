@@ -24,6 +24,10 @@ public class VerificadorDirectorio {
         archivos.add(archivo);
     }
     
+    public void elimineArhivo(int indice){
+        archivos.remove(indice);
+    }
+    
     public File[] listeArchivosDelDirectorio(String ruta){
         File folder = new File(ruta);
         return folder.listFiles();
@@ -51,7 +55,9 @@ public class VerificadorDirectorio {
                 }
             }
             if(!estaEliminado){
-                eliminados.add(new Archivo(archivosGuardados.ge, md5));
+                eliminados.add(new Archivo(archivosGuardados.get(indice).getFile(), archivosGuardados.get(indice).getMd5()));
+                archivos.remove(indice);
+                tamano-=1;
             }
         }
         
@@ -88,6 +94,7 @@ public class VerificadorDirectorio {
     public ArrayList<ArchivoControl> obtengaCambiosDelDirectorio(String ruta){
         File[] arhivos = listeArchivosDelDirectorio(ruta);
         ArrayList<ArchivoControl> control = new ArrayList<>();
+        int position = 0;
         for (File file : arhivos) {
             if (file.isFile()) {
                 String md5Key =  md5.getMD5(file.getAbsolutePath());
@@ -97,12 +104,20 @@ public class VerificadorDirectorio {
                     control.add(new ArchivoControl(false, true, false, file, md5Key));
                 } else{
                     boolean modificado = esModificado(md5Key, file, this.archivos);
-                    control.add(new ArchivoControl(false, nuevo, modificado, file, md5Key));
+                    if(modificado){
+                        elimineArhivo(position);
+                        agregueNuevoArchivo(new Archivo(file, md5Key));                        
+                    }
+                    control.add(new ArchivoControl(false, nuevo, modificado, file, md5Key));                    
                 }               
             }
+            position++;
         }
         
-        
+        ArrayList<Archivo> eliminados = obtengaArhivosEliminados(arhivos, this.archivos);
+        for(int contador = 0; contador < eliminados.size(); contador++){
+            control.add(new ArchivoControl(true, false, false, eliminados.get(contador).getFile(), eliminados.get(contador).getMd5()));
+        }
         
         return control;
     }
