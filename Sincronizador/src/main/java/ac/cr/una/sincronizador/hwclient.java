@@ -1,6 +1,5 @@
 package ac.cr.una.sincronizador;
 
-import ac.cr.una.ManejadorArchivos.ManejadorArchivo;
 import ac.cr.una.ManejadorArchivos.VerificadorDirectorio;
 import ac.cr.una.modelo.ArchivoControl;
 import java.io.File;
@@ -8,7 +7,6 @@ import java.io.IOException;
 import org.zeromq.ZMQ;
 import java.util.ArrayList;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import org.zeromq.ZFrame;
 import org.zeromq.ZMsg;
 
@@ -53,9 +51,10 @@ public class hwclient {
                 outMsg.add(new ZFrame(dirOrigen.getName()));
                 outMsg.add(new ZFrame(array));
                 outMsg.send(requester);
+                requester.recv(); 
             }
             archivos.clear();
-            requester.recv();              
+            //requester.recv();              
 //            String request = "Hello";
 //            System.out.println("Sending Hello " + requestNbr);
 //            requester.send(request.getBytes(), 0);
