@@ -62,12 +62,12 @@ public class ControlArchivos {
     
     public void saveFiles() throws IOException{
         setListGuardados();
-        ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("C:/guardarArchivo/server/lista.obj"));
+        ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream("C:/guardarArchivo/lista.obj"));
         salida.writeObject(this.listArchivoGuardado);
     }
     
     public boolean loadFiles() {
-        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("C:/guardarArchivo/client/lista.obj"))) {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream("C:/guardarArchivo/lista.obj"))) {
             this.listArchivoGuardado = (List<ArchivoGuardado>)entrada.readObject();
             entrada.close();
             return this.listArchivoGuardado != null;
