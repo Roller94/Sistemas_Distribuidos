@@ -1,7 +1,6 @@
 package ac.cr.una.sincronizador;
 
 import org.zeromq.ZMQ;
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.zeromq.ZMsg;
@@ -22,7 +21,7 @@ public class hwserver {
             String fileName = inMsg.pop().toString();
             byte[] fileData = inMsg.pop().getData();
 
-            Files.write(Paths.get("D:\\SistemasDistribuidos\\"+fileName),fileData);
+            Files.write(Paths.get("F:\\SistemasDistribuidos\\"+fileName),fileData);
             
             
             
