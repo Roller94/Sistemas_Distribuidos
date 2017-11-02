@@ -2,6 +2,8 @@ package ac.cr.una.controller;
 
 import ac.cr.una.manejadorArchivos.VerificadorDirectorio;
 import ac.cr.una.modelo.ArchivoControl;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.IOException;
 import org.zeromq.ZMQ;
@@ -30,13 +32,32 @@ public class ClienteController {
 
         ZMQ.Socket requester = context.socket(ZMQ.REQ);
         requester.connect("tcp://" + ip + ":8889");       
-//        verifique.almaceneArchivosDelDirectorioEnMemoria(rutaSincronizacion);
+        
         verifique.ObtenerBackUpArchivoDirectorio(backupArchivos);
         
         while (!Thread.currentThread().isInterrupted()) {
                        
-            ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(rutaSincronizacion);            
+            ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(rutaSincronizacion); 
             
+            if(archivos.size() > 0){
+                // Si hay archivos
+                String listFiles = new Gson().toJson(archivos);
+                requester.send(listFiles);
+                
+                byte[] reply = requester.recv(0);
+                String listFilesRecv = new String(reply);
+                System.out.println(listFilesRecv);
+                //ArrayList<ArchivoControl> archivosServer = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
+            } else {
+                // Traigame todo del server
+                String listFiles = new Gson().toJson(archivos);
+                requester.send(listFiles);
+                
+                byte[] reply = requester.recv(0);
+                String listFilesRecv = new String(reply);
+                System.out.println(listFilesRecv);
+            }
+            /*
             for(int i = 0; i < archivos.size(); i++){        
                 if(archivos.get(i).isElimando() == false){
                     String path = "C:\\SistemasDistribuidos\\"+archivos.get(i).getFile().getName();
@@ -64,9 +85,9 @@ public class ClienteController {
                 
                 System.out.println("Enviado: " + archivos.get(i).getFile().getName());                               
             }
-            Thread.sleep(15000);
-            archivos.clear();
             
+            archivos.clear();*/
+            Thread.sleep(15000);
             verifique.GuardarBackUpArchivoDirectorio(backupArchivos, rutaSincronizacion);
         }
         

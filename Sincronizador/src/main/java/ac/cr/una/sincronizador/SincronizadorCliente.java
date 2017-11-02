@@ -20,7 +20,7 @@ public class SincronizadorCliente {
         String rutaSincronizacion = "C:\\SistemasDistribuidos";
         String ipRoller = "192.168.43.139";
         String ipOsvaldo = "192.168.0.54";
-        clienteController.VerifiqueActualizacionesDelDirectorio(backupArchivos, rutaSincronizacion, ipOsvaldo);
+        clienteController.VerifiqueActualizacionesDelDirectorio(backupArchivos, rutaSincronizacion, "localhost");
         
     }
 }
