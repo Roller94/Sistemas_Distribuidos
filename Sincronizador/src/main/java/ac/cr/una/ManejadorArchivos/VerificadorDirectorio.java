@@ -51,8 +51,8 @@ public class VerificadorDirectorio {
         }
     }
     
-    public void GuardarBackUpArchivoDirectorio(String ruta) throws FileNotFoundException, IOException {
-        almaceneArchivosDelDirectorioEnMemoria(ruta);
+    public void GuardarBackUpArchivoDirectorio(String ruta, String rutaSincronizacion) throws FileNotFoundException, IOException {
+//        almaceneArchivosDelDirectorioEnMemoria(rutaSincronizacion);
         ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ruta));
         salida.writeObject(this.archivos);
     }

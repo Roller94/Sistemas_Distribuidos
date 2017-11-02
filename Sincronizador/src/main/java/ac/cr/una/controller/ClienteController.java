@@ -18,21 +18,24 @@ public class ClienteController {
         verifique = new VerificadorDirectorio();
     }
 
-    public void GuardarBackUpArchivoDirectorio(String ruta) throws IOException{
-        verifique.GuardarBackUpArchivoDirectorio(ruta);
+    public void GuardarBackUpArchivoDirectorio(String ruta, String rutaSincronizacion) throws IOException{
+        verifique.GuardarBackUpArchivoDirectorio(ruta, rutaSincronizacion);
     }
     
-    public void VerifiqueActualizacionesDelDirectorio(String ruta, String ip) throws IOException, InterruptedException{
+    public void VerifiqueActualizacionesDelDirectorio(String backupArchivos,String rutaSincronizacion, String ip) throws IOException, InterruptedException{
         
         ZMQ.Context context = ZMQ.context(1);                 
          
         System.out.println("Connecting to server…");
 
         ZMQ.Socket requester = context.socket(ZMQ.REQ);
-        requester.connect("tcp://" + ip + ":8889");
-           while (!Thread.currentThread().isInterrupted()) {
+        requester.connect("tcp://" + ip + ":8889");       
+//        verifique.almaceneArchivosDelDirectorioEnMemoria(rutaSincronizacion);
+        verifique.ObtenerBackUpArchivoDirectorio(backupArchivos);
+        
+//           while (!Thread.currentThread().isInterrupted()) {
                        
-            ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(ruta);            
+            ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(rutaSincronizacion);            
             
             for(int i = 0; i < archivos.size(); i++){        
                 if(archivos.get(i).isElimando() == false){
@@ -63,7 +66,8 @@ public class ClienteController {
             }
             Thread.sleep(15000);
             archivos.clear();
-        }
+//        }
+        verifique.GuardarBackUpArchivoDirectorio(backupArchivos, rutaSincronizacion);
         requester.close();
         context.term();
     }

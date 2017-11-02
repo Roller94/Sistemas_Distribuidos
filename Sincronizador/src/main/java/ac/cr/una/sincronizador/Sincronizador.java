@@ -18,9 +18,8 @@ public class Sincronizador {
         ClienteController clienteController = new ClienteController();
         String backupArchivos = "C:\\BackupArchivos\\archivoGuardado";
         String rutaSincronizacion = "C:\\SistemasDistribuidos";
-        String ip = "10.251.34.93";
-        clienteController.GuardarBackUpArchivoDirectorio(backupArchivos);
-        clienteController.VerifiqueActualizacionesDelDirectorio(rutaSincronizacion,ip);
+        String ip = "192.168.0.54";
+        clienteController.VerifiqueActualizacionesDelDirectorio(backupArchivos, rutaSincronizacion,ip);
         
     }
 }

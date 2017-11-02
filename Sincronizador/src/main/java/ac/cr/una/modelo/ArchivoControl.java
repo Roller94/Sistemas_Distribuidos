@@ -2,9 +2,8 @@
 package ac.cr.una.modelo;
 
 import java.io.File;
-import java.io.Serializable;
 
-public class ArchivoControl extends Archivo implements Serializable {
+public class ArchivoControl extends Archivo {
 
     private boolean elimando;
     private boolean nuevo;

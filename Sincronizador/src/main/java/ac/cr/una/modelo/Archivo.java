@@ -6,8 +6,9 @@
 package ac.cr.una.modelo;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class Archivo {
+public class Archivo implements Serializable {
     private File file;
     private String md5;
 
