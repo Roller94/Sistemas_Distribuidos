@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ac.cr.una.sincronizador;
+package ac.cr.una.manejadorArchivos;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

@@ -30,7 +30,7 @@ public class ServidorCliente {
 //                server.close();
             //}
             //else{
-                client = new ControlClient("C:/SistemasDistribuidos", "192.168.1.4");
+                client = new ControlClient("C:/SistemasDistribuidos", "10.251.34.103");
                 client.connect();
                 client.runClient();
                 client.close();
