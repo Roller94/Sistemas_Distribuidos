@@ -16,10 +16,10 @@ public class Sincronizador {
     
     public static void main(String args[]) throws IOException, InterruptedException{
         ClienteController clienteController = new ClienteController();
-        String backupArchivos = "C:\\BackupArchivos\\archivoGuardado";
+        String backupArchivos = "C:\\BackupArchivos\\archivoGuardado.obj";
         String rutaSincronizacion = "C:\\SistemasDistribuidos";
-        String ip = "192.168.0.54";
-        clienteController.VerifiqueActualizacionesDelDirectorio(backupArchivos, rutaSincronizacion,ip);
+        String ip = "192.168.43.139";
+        clienteController.VerifiqueActualizacionesDelDirectorio(backupArchivos, rutaSincronizacion, ip);
         
     }
 }

@@ -22,7 +22,7 @@ public class ClienteController {
         verifique.GuardarBackUpArchivoDirectorio(ruta, rutaSincronizacion);
     }
     
-    public void VerifiqueActualizacionesDelDirectorio(String backupArchivos,String rutaSincronizacion, String ip) throws IOException, InterruptedException{
+    public void VerifiqueActualizacionesDelDirectorio(String backupArchivos, String rutaSincronizacion, String ip) throws IOException, InterruptedException{
         
         ZMQ.Context context = ZMQ.context(1);                 
          
@@ -33,7 +33,7 @@ public class ClienteController {
 //        verifique.almaceneArchivosDelDirectorioEnMemoria(rutaSincronizacion);
         verifique.ObtenerBackUpArchivoDirectorio(backupArchivos);
         
-//           while (!Thread.currentThread().isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
                        
             ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(rutaSincronizacion);            
             
@@ -66,8 +66,10 @@ public class ClienteController {
             }
             Thread.sleep(15000);
             archivos.clear();
-//        }
-        verifique.GuardarBackUpArchivoDirectorio(backupArchivos, rutaSincronizacion);
+            
+            verifique.GuardarBackUpArchivoDirectorio(backupArchivos, rutaSincronizacion);
+        }
+        
         requester.close();
         context.term();
     }
