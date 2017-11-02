@@ -11,7 +11,7 @@ import org.zeromq.ZMsg;
 
 public class ServerController {
 
-    public static void main(String[] args) throws Exception {
+    public void run() throws Exception {
         ZMQ.Context context = ZMQ.context(1);
         
         String ruta = "D:\\SistemasDistribuidos";

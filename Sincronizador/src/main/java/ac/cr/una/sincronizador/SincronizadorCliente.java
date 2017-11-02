@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * @author ASUS
  */
-public class Sincronizador {
+public class SincronizadorCliente {
     
     public static void main(String args[]) throws IOException, InterruptedException{
         ClienteController clienteController = new ClienteController();
