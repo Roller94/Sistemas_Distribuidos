@@ -1,11 +1,18 @@
 
-package ac.cr.una.ManejadorArchivos;
+package ac.cr.una.manejadorArchivos;
 
 import ac.cr.una.modelo.Archivo;
 import ac.cr.una.modelo.ArchivoControl;
-import ac.cr.una.sincronizador.MD5;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class VerificadorDirectorio {
     private ArrayList<Archivo> archivos;
@@ -31,6 +38,23 @@ public class VerificadorDirectorio {
     public File[] listeArchivosDelDirectorio(String ruta){
         File folder = new File(ruta);
         return folder.listFiles();
+    }
+
+    public void ObtenerBackUpArchivoDirectorio(String ruta){
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(ruta))) {
+            this.archivos = (ArrayList<Archivo>)entrada.readObject();
+            entrada.close();
+            
+        } catch(IOException | ClassNotFoundException e){
+            Logger.getLogger(e.getMessage());
+
+        }
+    }
+    
+    public void GuardarBackUpArchivoDirectorio(String ruta) throws FileNotFoundException, IOException {
+        almaceneArchivosDelDirectorioEnMemoria(ruta);
+        ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ruta));
+        salida.writeObject(this.archivos);
     }
     
     public void almaceneArchivosDelDirectorioEnMemoria(String ruta){
