@@ -146,4 +146,27 @@ public class VerificadorDirectorio {
         return control;
     }
     
+    public ArrayList<ArchivoControl> compareArhivosDelServidor(ArrayList<ArchivoControl> archivosCliente){
+        ArrayList<ArchivoControl> archivosServerParaCliente = new ArrayList<>();
+        String rutaSincronizacion =  archivosCliente.get(0).getFile().getParent();
+        File[] arhivosServer = listeArchivosDelDirectorio(rutaSincronizacion);
+        for (File file : arhivosServer) {
+            boolean encontrado = false;
+            for (ArchivoControl archivoCliente : archivosCliente) {
+                if(archivoCliente.getFile().getName().equals(file.getName())){
+                    if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
+                        
+                    }
+                    
+                    encontrado = true;
+                }
+            }
+            if(!encontrado){
+                archivosServerParaCliente.add(new ArchivoControl(false, true, false, file, md5.getMD5(file.getAbsolutePath())));
+            }
+        }
+        
+        return archivosServerParaCliente;
+    }
+    
 }
