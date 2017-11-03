@@ -148,7 +148,7 @@ public class VerificadorDirectorio {
     
     public ArrayList<ArchivoControl> compareArhivosDelServidor(ArrayList<ArchivoControl> archivosCliente){
         ArrayList<ArchivoControl> archivosServerParaCliente = new ArrayList<>();
-        String rutaSincronizacion =  archivosCliente.get(0).getFile().getParent();
+        String rutaSincronizacion =  "C://SistemasDistribuidosServer";//archivosCliente.get(0).getFile().getParent();
         File[] arhivosServer = listeArchivosDelDirectorio(rutaSincronizacion);
         for (File file : arhivosServer) {
             boolean encontrado = false;

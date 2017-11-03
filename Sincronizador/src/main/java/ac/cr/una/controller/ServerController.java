@@ -53,8 +53,8 @@ public class ServerController {
             if (reply.length > 2) {
                 ArrayList<ArchivoControl> archivosCliente = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
                 ArrayList<ArchivoControl> archivosServidor = verifique.compareArhivosDelServidor(archivosCliente);
-                                        String listFiles = new Gson().toJson(archivosServidor);
-                    responder.send(listFiles);
+                String listFiles = new Gson().toJson(archivosServidor);
+                responder.send(listFiles);
                 // Comparar los archivos del cliente con los del server
                 System.out.println("Trae archivos!");
             } else {
