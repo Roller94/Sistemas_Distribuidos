@@ -159,11 +159,9 @@ public class VerificadorDirectorio {
                 }
                 
                 if(archivoCliente.getFile().getName().equals(file.getName())){
-<<<<<<< HEAD
                     /*if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
                         
                     }*/
-=======
                     //Si es modificado
                     if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
                         if(file.lastModified() > archivoCliente.getFile().lastModified()){
@@ -177,8 +175,6 @@ public class VerificadorDirectorio {
                     if(archivoCliente.isElimando()){
                         file.delete();
                     }
->>>>>>> origin/master
-                    
                     encontrado = true;
                 }
             }
