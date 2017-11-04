@@ -153,10 +153,31 @@ public class VerificadorDirectorio {
         for (File file : arhivosServer) {
             boolean encontrado = false;
             for (ArchivoControl archivoCliente : archivosCliente) {
+                
+                if(archivoCliente.isNuevo()){                    
+                    file.createNewFile();
+                }
+                
                 if(archivoCliente.getFile().getName().equals(file.getName())){
+<<<<<<< HEAD
                     /*if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
                         
                     }*/
+=======
+                    //Si es modificado
+                    if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
+                        if(file.lastModified() > archivoCliente.getFile().lastModified()){
+                            file.delete();
+                            archivoCliente.getFile().createNewFile();
+                        }else{
+                            archivosServerParaCliente.add(new ArchivoControl(false, false, true, file, md5.getMD5(file.getAbsolutePath())));
+                        }
+                    }
+                    //Si es eliminado
+                    if(archivoCliente.isElimando()){
+                        file.delete();
+                    }
+>>>>>>> origin/master
                     
                     encontrado = true;
                 }
