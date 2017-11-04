@@ -22,7 +22,7 @@ public class ServerController {
     public void run() throws Exception {
         ZMQ.Context context = ZMQ.context(1);
         
-        String ruta = "D:\\SistemasDistribuidos";
+        String ruta = "C:\\SistemasDistribuidosServer";
 
         ZMQ.Socket responder = context.socket(ZMQ.REP);
         responder.bind("tcp://*:8889");
@@ -32,7 +32,7 @@ public class ServerController {
             String listFilesRecv = new String(reply);
             System.out.println(listFilesRecv);
             
-            if (reply.length > 2) {
+            if (reply.length > 0) {
                 ArrayList<ArchivoControl> archivosCliente = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
                 ArrayList<ArchivoControl> archivosServidor = verifique.compareArhivosDelServidor(archivosCliente);
                 String listFiles = new Gson().toJson(archivosServidor);

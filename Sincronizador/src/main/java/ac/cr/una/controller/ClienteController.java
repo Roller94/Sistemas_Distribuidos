@@ -36,7 +36,7 @@ public class ClienteController {
         
         verifique.ObtenerBackUpArchivoDirectorio(backupArchivos);
         
-        while (!Thread.currentThread().isInterrupted()) {
+        //while (!Thread.currentThread().isInterrupted()) {
                        
             ArrayList<ArchivoControl> archivos = verifique.obtengaCambiosDelDirectorio(rutaSincronizacion); 
             
@@ -49,66 +49,26 @@ public class ClienteController {
                 String listFilesRecv = new String(reply);
                 System.out.println(listFilesRecv);
                 ArrayList<ArchivoControl> archivosServer = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
-            
-                RealizarAjustesDirectorio(archivosServer);                
+                
+                verifique.compareArhivosDelCliente(archivosServer);                
             } else {
                 // Traigame todo del server
-                String listFiles = new Gson().toJson(archivos);
-                requester.send(listFiles);
+                requester.send("");
                 
                 byte[] reply = requester.recv(0);
                 String listFilesRecv = new String(reply);
                 System.out.println(listFilesRecv);
                 ArrayList<ArchivoControl> archivosServer = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
                         
-                RealizarAjustesDirectorio(archivosServer);
+                verifique.compareArhivosDelCliente(archivosServer);          
             }
             
             Thread.sleep(15000);
             verifique.GuardarBackUpArchivoDirectorio(backupArchivos, rutaSincronizacion);
-        }
+        //}
         
         requester.close();
         context.term();
-    }
-    
-    public void RealizarAjustesDirectorio(ArrayList<ArchivoControl> archivosServer) throws IOException {
-        
-        for (ArchivoControl archivo : archivosServer) {            
-            if(archivo.isNuevo() && archivo.isModificado()){
-                String[] nameFile = archivo.getFile().getName().split(".");
-                File file = new File("C://SistemasDistribuidos" + nameFile[0] + " - copia." + nameFile[1]);
-                if(archivo.getFile().renameTo(file)){
-                    System.out.println("Copia en conflicto creada correctamente!");
-                }
-            } 
-            
-            if(archivo.isNuevo() && !archivo.isModificado()){
-                if(archivo.getFile().createNewFile()){
-                    System.out.println("El archivo " + archivo.getFile().getName() + " se ha creado correctamente!");
-                }
-            }
-            
-            if(archivo.isModificado() && !archivo.isNuevo()){
-                File file = archivo.getFile();
-                if(archivo.getFile().delete()){
-                    if(file.createNewFile()){
-                        System.out.println("El archivo " + file.getName() + " se ha modificado correctamente!");
-                    }
-                }                    
-            }
-                
-            if(archivo.isElimando()){
-                String fileName = archivo.getFile().getName();
-                if(archivo.getFile().delete()){
-                    File file = new File("C:\\SistemasDistribuidos\\" + fileName);
-                    if(file.exists() && !file.isDirectory()) {  
-                        file.delete();
-                        System.out.println("Archivo " + fileName + " elimiando!");
-                    }
-                }
-            }
-        }
     }
     
 }

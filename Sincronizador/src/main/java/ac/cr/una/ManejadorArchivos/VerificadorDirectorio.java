@@ -150,74 +150,84 @@ public class VerificadorDirectorio {
         ArrayList<ArchivoControl> archivosServerParaCliente = new ArrayList<>();
         String rutaSincronizacion =  "C://SistemasDistribuidosServer";//archivosCliente.get(0).getFile().getParent();
         File[] arhivosServer = listeArchivosDelDirectorio(rutaSincronizacion);
+        
         for (File file : arhivosServer) {
             boolean encontrado = false;
             for (ArchivoControl archivoCliente : archivosCliente) {
-                
+                // Si es Nuevo
                 if(archivoCliente.isNuevo()){                    
-                    file.createNewFile();
+                    //file.createNewFile();
+                    System.out.println("NUEVO: " + file.getName());
                 }
                 
                 if(archivoCliente.getFile().getName().equals(file.getName())){
-                    //Si es modificado
+                    // Si es modificado
                     if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
                         if(file.lastModified() < archivoCliente.getFile().lastModified()){
-                            file.delete();
-                            archivoCliente.getFile().createNewFile();
+                            //file.delete();
+                            System.out.println("ELIMINADO: " + file.getName());
+                            //archivoCliente.getFile().createNewFile();
+                            System.out.println("NUEVO: " + archivoCliente.getFile().getName());
                         }else{
                             archivosServerParaCliente.add(new ArchivoControl(false, false, true, file, md5.getMD5(file.getAbsolutePath())));
                         }
                     }
-                    //Si es eliminado
+                    // Si es eliminado
                     if(archivoCliente.isElimando()){
-                        file.delete();
+                        //file.delete();
+                        System.out.println("ELIMINADO: " + file.getName());
                     }
                     encontrado = true;
                 }
             }
             if(!encontrado){
                 archivosServerParaCliente.add(new ArchivoControl(false, true, false, file, md5.getMD5(file.getAbsolutePath())));
+                System.out.print("ASD");
             }
+                
         }
         
         return archivosServerParaCliente;
     }
     
-       public ArrayList<ArchivoControl> compareArhivosDelCliente(ArrayList<ArchivoControl> archivosCliente) throws IOException{
-        ArrayList<ArchivoControl> archivosServerParaCliente = new ArrayList<>();
-        String rutaSincronizacion =  "C://SistemasDistribuidosServer";//archivosCliente.get(0).getFile().getParent();
-        File[] arhivosServer = listeArchivosDelDirectorio(rutaSincronizacion);
-        for (File file : arhivosServer) {
-            boolean encontrado = false;
-            for (ArchivoControl archivoCliente : archivosCliente) {
-                
-                if(archivoCliente.isNuevo()){                    
-                    file.createNewFile();
-                }
-                
-                if(archivoCliente.getFile().getName().equals(file.getName())){
-                    //Si es modificado
-                    if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
-                        if(file.lastModified() < archivoCliente.getFile().lastModified()){
-                            file.delete();
-                            archivoCliente.getFile().createNewFile();
-                        }else{
-                            archivosServerParaCliente.add(new ArchivoControl(false, false, true, file, md5.getMD5(file.getAbsolutePath())));
+    public void compareArhivosDelCliente(ArrayList<ArchivoControl> archivosServer) throws IOException{
+        String rutaSincronizacion =  "C://SistemasDistribuidos";//archivosCliente.get(0).getFile().getParent();
+        File[] arhivosCliente = listeArchivosDelDirectorio(rutaSincronizacion);
+        
+        if(arhivosCliente.length > 0){
+            for (File file : arhivosCliente) {
+                for (ArchivoControl archivo : archivosServer) {
+                    // Si es Nuevo
+                    if(archivo.isNuevo()){                    
+                        //archivo.getFile().createNewFile();
+                        System.out.println("ELIMINADO: " + archivo.getFile().getName());
+                    }
+
+                    if(archivo.getFile().getName().equals(file.getName())){
+                        // Si es modificado
+                        if(!(md5.getMD5(file.getAbsolutePath()).equals(archivo.getMd5()))){
+                            if(file.lastModified() < archivo.getFile().lastModified()){
+                                //file.delete();
+                                System.out.println("ELIMINADO: " + file.getName());
+                                //archivo.getFile().createNewFile();
+                                System.out.println("NUEVO: " + archivo.getFile().getName());
+                            }
+                        }
+                        // Si es eliminado
+                        if(archivo.isElimando()){
+                            //file.delete();
+                            System.out.println("ELIMINADO: " + file.getName());
                         }
                     }
-                    //Si es eliminado
-                    if(archivoCliente.isElimando()){
-                        file.delete();
-                    }
-                    encontrado = true;
                 }
             }
-            if(!encontrado){
-                archivosServerParaCliente.add(new ArchivoControl(false, true, false, file, md5.getMD5(file.getAbsolutePath())));
+        } else {
+            for (ArchivoControl archivo : archivosServer) {                    
+                if(archivo.isNuevo() || archivo.isModificado()){                    
+                    //archivo.getFile().createNewFile();
+                    System.out.println("NUEVO o MODIFICADO: " + archivo.getFile().getName());
+                }
             }
         }
-        
-        return archivosServerParaCliente;
-    }
-    
+    }    
 }
