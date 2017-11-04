@@ -27,25 +27,7 @@ public class ServerController {
         ZMQ.Socket responder = context.socket(ZMQ.REP);
         responder.bind("tcp://*:8889");
 
-        while (!Thread.currentThread().isInterrupted()) {
-            
-            /*ZMsg inMsg = ZMsg.recvMsg(responder);
-            String contentType = inMsg.pop().toString();
-            String fileName = inMsg.pop().toString();
-            String fileDelete = inMsg.pop().toString();
-            byte[] fileData = inMsg.pop().getData();
-            
-            if(fileDelete.equals("SI")){
-                File f = new File("D:\\SistemasDistribuidos\\" + fileName);
-                if(f.exists() && !f.isDirectory()) {  
-                    f.delete();
-                    System.out.println("Archivo " + fileName + " elimiando!");
-                }
-            } else {
-                Files.write(Paths.get("D:\\SistemasDistribuidos\\" + fileName), fileData);
-                System.out.println("Archivo " + fileName + " creado/actualizado!");
-            }*/
-            
+        while (!Thread.currentThread().isInterrupted()) {            
             byte[] reply = responder.recv(0);
             String listFilesRecv = new String(reply);
             System.out.println(listFilesRecv);
@@ -69,6 +51,7 @@ public class ServerController {
                 }
             }      
         }
+        
         responder.close();
         context.term();
     }

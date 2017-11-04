@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.zeromq.ZMQ;
 import java.util.ArrayList;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.zeromq.ZFrame;
 import org.zeromq.ZMsg;
 
@@ -24,7 +25,7 @@ public class ClienteController {
         verifique.GuardarBackUpArchivoDirectorio(ruta, rutaSincronizacion);
     }
     
-    public void VerifiqueActualizacionesDelDirectorio(String backupArchivos, String rutaSincronizacion, String ip) throws IOException, InterruptedException{
+    public void VerifiqueActualizacionesDelDirectorio(String backupArchivos, String rutaSincronizacion, String ip) throws InterruptedException, IOException{
         
         ZMQ.Context context = ZMQ.context(1);                 
          
@@ -47,7 +48,9 @@ public class ClienteController {
                 byte[] reply = requester.recv(0);
                 String listFilesRecv = new String(reply);
                 System.out.println(listFilesRecv);
-                //ArrayList<ArchivoControl> archivosServer = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
+                ArrayList<ArchivoControl> archivosServer = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
+            
+                RealizarAjustesDirectorio(archivosServer);                
             } else {
                 // Traigame todo del server
                 String listFiles = new Gson().toJson(archivos);
@@ -56,43 +59,56 @@ public class ClienteController {
                 byte[] reply = requester.recv(0);
                 String listFilesRecv = new String(reply);
                 System.out.println(listFilesRecv);
-            }
-            /*
-            for(int i = 0; i < archivos.size(); i++){        
-                if(archivos.get(i).isElimando() == false){
-                    String path = "C:\\SistemasDistribuidos\\"+archivos.get(i).getFile().getName();
-                    File dirOrigen  = new File(path);
-                    byte[] array = Files.readAllBytes(dirOrigen.toPath());
-
-                    ZMsg outMsg = new ZMsg();
-                    outMsg.add(new ZFrame("application/xml"));
-                    outMsg.add(new ZFrame(dirOrigen.getName()));                
-                    outMsg.add(new ZFrame("NO"));
-                    outMsg.add(new ZFrame(array));
-                    outMsg.send(requester);
-                    requester.recv();
-                } else {
-                    byte[] array = null;
-                    
-                    ZMsg outMsg = new ZMsg();
-                    outMsg.add(new ZFrame("application/xml"));
-                    outMsg.add(new ZFrame(archivos.get(i).getFile().getName()));                
-                    outMsg.add(new ZFrame("SI"));
-                    outMsg.add(new ZFrame(array));
-                    outMsg.send(requester);
-                    requester.recv();
-                }                 
-                
-                System.out.println("Enviado: " + archivos.get(i).getFile().getName());                               
+                ArrayList<ArchivoControl> archivosServer = new Gson().fromJson(listFilesRecv, new TypeToken<ArrayList<ArchivoControl>>() {}.getType());
+                        
+                RealizarAjustesDirectorio(archivosServer);
             }
             
-            archivos.clear();*/
             Thread.sleep(15000);
             verifique.GuardarBackUpArchivoDirectorio(backupArchivos, rutaSincronizacion);
         }
         
         requester.close();
         context.term();
+    }
+    
+    public void RealizarAjustesDirectorio(ArrayList<ArchivoControl> archivosServer) throws IOException {
+        
+        for (ArchivoControl archivo : archivosServer) {            
+            if(archivo.isNuevo() && archivo.isModificado()){
+                String[] nameFile = archivo.getFile().getName().split(".");
+                File file = new File("C://SistemasDistribuidos" + nameFile[0] + " - copia." + nameFile[1]);
+                if(archivo.getFile().renameTo(file)){
+                    System.out.println("Copia en conflicto creada correctamente!");
+                }
+            } 
+            
+            if(archivo.isNuevo() && !archivo.isModificado()){
+                if(archivo.getFile().createNewFile()){
+                    System.out.println("El archivo " + archivo.getFile().getName() + " se ha creado correctamente!");
+                }
+            }
+            
+            if(archivo.isModificado() && !archivo.isNuevo()){
+                File file = archivo.getFile();
+                if(archivo.getFile().delete()){
+                    if(file.createNewFile()){
+                        System.out.println("El archivo " + file.getName() + " se ha modificado correctamente!");
+                    }
+                }                    
+            }
+                
+            if(archivo.isElimando()){
+                String fileName = archivo.getFile().getName();
+                if(archivo.getFile().delete()){
+                    File file = new File("C:\\SistemasDistribuidos\\" + fileName);
+                    if(file.exists() && !file.isDirectory()) {  
+                        file.delete();
+                        System.out.println("Archivo " + fileName + " elimiando!");
+                    }
+                }
+            }
+        }
     }
     
 }

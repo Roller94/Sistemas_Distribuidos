@@ -146,7 +146,7 @@ public class VerificadorDirectorio {
         return control;
     }
     
-    public ArrayList<ArchivoControl> compareArhivosDelServidor(ArrayList<ArchivoControl> archivosCliente){
+    public ArrayList<ArchivoControl> compareArhivosDelServidor(ArrayList<ArchivoControl> archivosCliente) throws IOException{
         ArrayList<ArchivoControl> archivosServerParaCliente = new ArrayList<>();
         String rutaSincronizacion =  "C://SistemasDistribuidosServer";//archivosCliente.get(0).getFile().getParent();
         File[] arhivosServer = listeArchivosDelDirectorio(rutaSincronizacion);
@@ -154,9 +154,9 @@ public class VerificadorDirectorio {
             boolean encontrado = false;
             for (ArchivoControl archivoCliente : archivosCliente) {
                 if(archivoCliente.getFile().getName().equals(file.getName())){
-                    if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
+                    /*if(!(md5.getMD5(file.getAbsolutePath()).equals(archivoCliente.getMd5()))){
                         
-                    }
+                    }*/
                     
                     encontrado = true;
                 }
