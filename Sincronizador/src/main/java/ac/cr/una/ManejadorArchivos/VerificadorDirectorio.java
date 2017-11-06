@@ -157,6 +157,7 @@ public class VerificadorDirectorio {
                     // Si es Nuevo
                     if(archivoCliente.isNuevo()){                    
                         file.createNewFile();
+                        archivoCliente.setNuevo(false);
                         System.out.println("NUEVO: " + file.getName());
                     }
 
@@ -167,6 +168,7 @@ public class VerificadorDirectorio {
                                 file.delete();
                                 System.out.println("ELIMINADO: " + file.getName());
                                 archivoCliente.getFile().createNewFile();
+                                archivoCliente.setModificado(false);
                                 System.out.println("NUEVO: " + archivoCliente.getFile().getName());
                             }else{
                                 archivosServerParaCliente.add(new ArchivoControl(false, false, true, file, md5.getMD5(file.getAbsolutePath())));
@@ -175,6 +177,7 @@ public class VerificadorDirectorio {
                         // Si es eliminado
                         if(archivoCliente.isElimando()){
                             file.delete();
+                            archivoCliente.setElimando(false);
                             System.out.println("ELIMINADO: " + file.getName());
                         }
                         encontrado = true;
@@ -208,6 +211,7 @@ public class VerificadorDirectorio {
                     // Si es Nuevo
                     if(archivo.isNuevo()){                    
                         archivo.getFile().createNewFile();
+                        archivo.setNuevo(false);
                         System.out.println("NUEVO: " + archivo.getFile().getName());
                     }
 
@@ -218,12 +222,14 @@ public class VerificadorDirectorio {
                                 file.delete();
                                 System.out.println("ELIMINADO: " + file.getName());
                                 archivo.getFile().createNewFile();
+                                archivo.setModificado(false);
                                 System.out.println("NUEVO: " + archivo.getFile().getName());
                             }
                         }
                         // Si es eliminado
                         if(archivo.isElimando()){
                             file.delete();
+                            archivo.setElimando(false);
                             System.out.println("ELIMINADO: " + file.getName());
                         }
                     }
